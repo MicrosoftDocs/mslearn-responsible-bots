@@ -15,7 +15,9 @@ namespace Microsoft.BotBuilderSamples
             var t = s.Split(',');
             Capital = t[0].Trim('"');
             Name = t[4].Trim('"');
-            // Population = int.Parse(t[9].Trim('"'));
+            float res;
+            Population =
+                float.TryParse(t[9].Trim('"'), out res) ? (int)res : 0;
         }
 
         public string Name { get; set; }
