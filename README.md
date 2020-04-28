@@ -4,11 +4,12 @@ languages:
 - csharp
 products:
 - dotnet
-description: "Add 150 character max description"
-urlFragment: "update-this-to-unique-url-stub"
+- azure-bot-service
+description: "This sample shows how to create a simple Responsible Educational Assistant bot using Azure Bot Service, LUIS, and Q&A Maker"
+urlFragment: "learn-responsible-bots"
 ---
 
-# Official Microsoft Sample
+# Creating Responsible Educational Assistant Bot
 
 <!-- 
 Guidelines on README format: https://review.docs.microsoft.com/help/onboard/admin/samples/concepts/readme-template?branch=master
@@ -18,11 +19,19 @@ Guidance on onboarding samples to docs.microsoft.com/samples: https://review.doc
 Taxonomies for products and languages: https://review.docs.microsoft.com/new-hope/information-architecture/metadata/taxonomies?branch=master
 -->
 
-Give a short description for your sample here. What does it do and why is it important?
+This sample shows how to create simple Educational Assistant bot in the field of Geography. This bot tries
+to follow [Responsible AI Guidelines][Guidelines10].
+
+This repository shows step-by-step process for creating a bot. Different stages are represented by GitHub
+commit history. Here is a short guideline:
+
+ * [Country Capital Dictionary]()
+ * [LUIS Bot to answer capital questions]()
+ * [Integration of Q&A Maker]()
+ * [Final Version]()
 
 ## Contents
 
-Outline the file contents of the repository. It helps users navigate the codebase, build configuration and any related assets.
 
 | File/folder       | Description                                |
 |-------------------|--------------------------------------------|
@@ -35,19 +44,29 @@ Outline the file contents of the repository. It helps users navigate the codebas
 
 ## Prerequisites
 
-Outline the required components and tools that a user might need to have on their machine in order to run the sample. This can be anything from frameworks, SDKs, OS versions or IDE releases.
+In this sample, we will be using [Azure Bot Service][BotService] and [C# Programming Language][CSharp] to build a bot. Thus, you will need the following:
+* Basic knowledge of C#. You may want to [take this course][CSCourse] if you are not familiar with the language
+* Azure Account. [This module][AzAccount] describes getting one.
+* We suggest using [Visual Studio 2019][VS] as source code editor. Please, download and install Visual Studio on your computer, selecting "Azure Development". If your computer is not powerful enough, or you do not want to perform the installation - you should be able to use **Visual Studio Online**, though it is not recommended.
 
 ## Setup
 
-Explain how to prepare the sample once the user clones or downloads the repository. The section should outline every step necessary to install dependencies and set up any settings (for example, API keys and output folders).
+To roll out the sample, do the following:
+* Create new [Azure Bot Service][BotService] through Azure Portal
+* Download the Bot Source Code and unzip it to some temporary directory (`c:\temp\`)
+* Clone this repository to some working directory (eg. `c:\work`)
+* Copy `appsettings.json` file with your App Id and App Secret values from temporary directory to the `src` subdirectory in the working directory.
+* You should now be able to check out different stages of bot development from different checkpoints in commit history,
+  and at each stage run the bot code locally in the bot emulator, or deploy it to Azure.
 
-## Running the sample
-
-Outline step-by-step instructions to execute the sample and see its output. Include steps for executing the sample from the IDE, starting specific services in the Azure portal or anything related to the overall launch of the code.
+> **Important:** This lab also involves some manual operations like setting up LUIS model in the cloud, or training Q&A Maker model. Those steps are described in the corresponding Microsoft Learn course. The final bot code might not run without those steps.
 
 ## Key concepts
 
-Provide users with more context on the tools and services used in the sample. Explain some of the code that is being used and how services interact with each other.
+This sample will make us familiar with the following:
+* Concepts of Responsible Conversational UI
+* Using [Language Understanding Intelligent Service][LUIS] to perform intent classification and entity extraction from natural text
+* Using [Q&A NMaker][QAMaker] to set up simple question answering logic
 
 ## Contributing
 
@@ -62,3 +81,13 @@ provided by the bot. You will only need to do this once across all repos using o
 This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/).
 For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or
 contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
+
+
+[Guidelines10]: https://www.microsoft.com/research/publication/responsible-bots/
+[BotService]: https://azure.microsoft.com/services/bot-service/
+[CSharp]: https://dotnet.microsoft.com/learn/csharp
+[CSCourse]: https://docs.microsoft.com/dotnet/csharp/tutorials/
+[AzAccount]: https://docs.microsoft.com/learn/modules/create-an-azure-account/
+[VS]: https://www.visualstudio.com/downloads/
+[LUIS]: https://docs.microsoft.com/azure/cognitive-services/luis/
+[QAMaker]: https://docs.microsoft.com/azure/cognitive-services/qnamaker/
