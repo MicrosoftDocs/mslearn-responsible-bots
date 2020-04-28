@@ -11,6 +11,7 @@ using Microsoft.Extensions.DependencyInjection;
 
 using Microsoft.BotBuilderSamples.Bots;
 using Microsoft.Bot.Builder.EchoBot;
+using Microsoft.Bot.Builder.AI.Luis;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -29,6 +30,12 @@ namespace Microsoft.BotBuilderSamples
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            var luisApplication = new LuisApplication(
+                Configuration["LuisAppId"],
+                Configuration["LuisAPIKey"],
+                Configuration["LuisEndpointUrl"]);
+            services.AddSingleton(new LuisRecognizer(luisApplication));
 
             // Create the Bot Framework Adapter.
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();

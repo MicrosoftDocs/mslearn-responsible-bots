@@ -8,22 +8,32 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
+using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Schema;
 
 namespace Microsoft.BotBuilderSamples.Bots
 {
     public class EchoBot : ActivityHandler
     {
+        LuisRecognizer rec;
+
+        public EchoBot(LuisRecognizer rec)
+        {
+            this.rec = rec;
+        }
+
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
-            var name = turnContext.Activity.Text;
+            var res = await rec.RecognizeAsync(turnContext, cancellationToken);
+            await turnContext.SendActivityAsync(res.GetTopScoringIntent().ToString());
+            await turnContext.SendActivityAsync(res.Entities.ToString());
+        }
+
+        protected string GetCapital(string name)
+        {
             var f = System.IO.Path.Combine(Environment.CurrentDirectory, @"worldcities.csv");
             var cd = new CountryData(f);
-            var cap = cd.GetCapital(name);
-            var replyText = cap == null 
-                ? "I do not know this country" 
-                : $"The capital of {name} is {cap}!" ;
-            await turnContext.SendActivityAsync(replyText);
+            return cd.GetCapital(name);
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
