@@ -42,5 +42,18 @@ namespace Microsoft.BotBuilderSamples
                 c => c.Name.ToLower() == country.ToLower())?.Capital;
         }
 
+        public string GetCountry(string city)
+        {
+            return Countries.FirstOrDefault(
+                c => c.Capital.ToLower() == city.ToLower())?.Name;
+        }
+
+        public int? GetPopulation(string city)
+        {
+            return Countries.FirstOrDefault(
+                c => c.Capital.ToLower() == city.ToLower())?.Population;
+        }
+
+
     }
 }
