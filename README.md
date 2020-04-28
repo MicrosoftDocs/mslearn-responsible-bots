@@ -25,10 +25,11 @@ to follow [Responsible AI Guidelines][Guidelines10].
 This repository shows step-by-step process for creating a bot. Different stages are represented by GitHub
 commit history. Here is a short guideline:
 
- * [Country Capital Dictionary]()
- * [LUIS Bot to answer capital questions]()
- * [Integration of Q&A Maker]()
- * [Final Version]()
+ * [Country Capital Dictionary](../t1-capdict)
+ * [LUIS Bot to answer capital questions](../t2-luisrec)
+ * [Adding Capital Game](../t3-capgame)
+ * [Integration of Q&A Maker](../t4-qamaker)
+ * [Final Version](../master)
 
 ## Contents
 
