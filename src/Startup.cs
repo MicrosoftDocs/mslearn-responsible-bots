@@ -12,6 +12,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.BotBuilderSamples.Bots;
 using Microsoft.Bot.Builder.EchoBot;
 using Microsoft.Bot.Builder.AI.Luis;
+using Microsoft.Bot.Builder.AI.QnA;
 
 namespace Microsoft.BotBuilderSamples
 {
@@ -36,6 +37,22 @@ namespace Microsoft.BotBuilderSamples
                 Configuration["LuisAPIKey"],
                 Configuration["LuisEndpointUrl"]);
             services.AddSingleton(new LuisRecognizer(luisApplication));
+
+            services.AddSingleton(sp =>
+            {
+                return new QnAMaker(
+                    new QnAMakerEndpoint
+                    {
+                        EndpointKey = Configuration["QnAEndpointKey"],
+                        Host = Configuration["QnAHostname"],
+                        KnowledgeBaseId = Configuration["QnAKbId"],
+                    },
+                    new QnAMakerOptions
+                    {
+                        ScoreThreshold = 0.9f,
+                        Top = 1,
+                    });
+            });
 
             // Create the Bot Framework Adapter.
             services.AddSingleton<IBotFrameworkHttpAdapter, AdapterWithErrorHandler>();

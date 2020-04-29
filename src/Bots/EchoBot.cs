@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Hosting.Internal;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
+using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Schema;
 using Newtonsoft.Json.Linq;
 
@@ -20,10 +21,12 @@ namespace Microsoft.BotBuilderSamples.Bots
     {
         LuisRecognizer rec;
         CountryData CData;
+        QnAMaker QnA;
 
-        public EchoBot(LuisRecognizer rec)
+        public EchoBot(LuisRecognizer rec,QnAMaker QnA)
         {
             this.rec = rec;
+            this.QnA = QnA;
             var f = System.IO.Path.Combine(Environment.CurrentDirectory, @"worldcities.csv");
             CData = new CountryData(f);
         }
@@ -31,14 +34,23 @@ namespace Microsoft.BotBuilderSamples.Bots
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
         {
             var res = await rec.RecognizeAsync(turnContext, cancellationToken);
-            var (intent, score) = res.GetTopScoringIntent();
-            if (score>0.3)
+            var (intent, luis_score) = res.GetTopScoringIntent();
+            var ans = await QnA.GetAnswersAsync(turnContext);
+            var qna_score = ans == null || ans.Count() == 0 ? 0.0 : ans[0].Score;
+            if (luis_score>0.3 && luis_score>qna_score)
             {
                 await ProcessLuisResult(turnContext, intent, res.Entities);
             }
             else
             {
-                await turnContext.SendActivityAsync("I am not sure I understand you fully");
+                if (ans == null || ans.Count() == 0)
+                {
+                    await turnContext.SendActivityAsync("I am not sure I understand you fully");
+                }
+                else
+                {
+                    await turnContext.SendActivityAsync(ans[0].Answer);
+                }
             }
         }
 

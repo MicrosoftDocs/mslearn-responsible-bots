@@ -1,0 +1,97 @@
+{
+  "luis_schema_version": "4.0.0",
+  "versionId": "0.1",
+  "name": "GeoFriend",
+  "desc": "Educational Assistant Bot",
+  "culture": "en-us",
+  "tokenizerVersion": "1.0.0",
+  "intents": [
+    {
+      "name": "get_capital"
+    },
+    {
+      "name": "get_country"
+    },
+    {
+      "name": "get_population"
+    },
+    {
+      "name": "None"
+    },
+    {
+      "name": "play_game"
+    }
+  ],
+  "entities": [],
+  "composites": [],
+  "closedLists": [],
+  "patternAnyEntities": [],
+  "regex_entities": [],
+  "prebuiltEntities": [
+    {
+      "name": "geographyV2",
+      "roles": []
+    }
+  ],
+  "model_features": [],
+  "regex_features": [],
+  "patterns": [],
+  "utterances": [
+    {
+      "text": "give me a quiz",
+      "intent": "play_game",
+      "entities": []
+    },
+    {
+      "text": "how many people live in moscow?",
+      "intent": "get_population",
+      "entities": []
+    },
+    {
+      "text": "i need to know the capital city of israel",
+      "intent": "get_capital",
+      "entities": []
+    },
+    {
+      "text": "i want to play capital game",
+      "intent": "play_game",
+      "entities": []
+    },
+    {
+      "text": "in which country is moscow?",
+      "intent": "get_country",
+      "entities": []
+    },
+    {
+      "text": "what country's capital is paris?",
+      "intent": "get_country",
+      "entities": []
+    },
+    {
+      "text": "what is france's capital?",
+      "intent": "get_capital",
+      "entities": []
+    },
+    {
+      "text": "what is the capital of united states?",
+      "intent": "get_capital",
+      "entities": []
+    },
+    {
+      "text": "what is the number of people living in cairo?",
+      "intent": "get_population",
+      "entities": []
+    },
+    {
+      "text": "what is the population of istanbul?",
+      "intent": "get_population",
+      "entities": []
+    },
+    {
+      "text": "whose capital is tokyo?",
+      "intent": "get_country",
+      "entities": []
+    }
+  ],
+  "settings": []
+}
