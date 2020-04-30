@@ -13,12 +13,19 @@ using Microsoft.Bot.Builder;
 using Microsoft.Bot.Builder.AI.Luis;
 using Microsoft.Bot.Builder.AI.QnA;
 using Microsoft.Bot.Schema;
+using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 
 namespace Microsoft.BotBuilderSamples.Bots
 {
     public class EchoBot : ActivityHandler
     {
+        readonly string welcomeText = 
+                "Hello!\n"+
+                "I am a teaching assistant bot that will help you learn **Geography**. I will not be able to teach you, but I can definitely help! Feel free to ask me about different countries and their capitals. If not sure, start with **what can I say?**";
+        
+        readonly string unknownText = "I am not sure I understand you fully. If you are not sure what to say, ask **what can I say?**";
+
         LuisRecognizer rec;
         CountryData CData;
         QnAMaker QnA;
@@ -27,8 +34,9 @@ namespace Microsoft.BotBuilderSamples.Bots
         {
             this.rec = rec;
             this.QnA = QnA;
-            var f = System.IO.Path.Combine(Environment.CurrentDirectory, @"worldcities.csv");
-            CData = new CountryData(f);
+            var f1 = System.IO.Path.Combine(Environment.CurrentDirectory, @"worldcities.csv");
+            var f2 = System.IO.Path.Combine(Environment.CurrentDirectory, @"countryflags.csv");
+            CData = new CountryData(f1,f2);
         }
 
         protected override async Task OnMessageActivityAsync(ITurnContext<IMessageActivity> turnContext, CancellationToken cancellationToken)
@@ -45,7 +53,7 @@ namespace Microsoft.BotBuilderSamples.Bots
             {
                 if (ans == null || ans.Count() == 0)
                 {
-                    await turnContext.SendActivityAsync("I am not sure I understand you fully");
+                    await turnContext.SendActivityAsync(unknownText);
                 }
                 else
                 {
@@ -64,7 +72,7 @@ namespace Microsoft.BotBuilderSamples.Bots
             var geo = entities["geographyV2"];
             if (geo==null || geo.Count()!=1)
             {
-                await turnContext.SendActivityAsync("I am not sure which location you mean");
+                await turnContext.SendActivityAsync(unknownText);
                 return;
             }
             var loc = geo[0]["location"].ToString();
@@ -78,9 +86,22 @@ namespace Microsoft.BotBuilderSamples.Bots
                     break;
                 case "get_country":
                     var cou = CData.GetCountry(loc);
-                    await turnContext.SendActivityAsync(cou == null
-                            ? $"I do not know the city named {loc}"
-                            : $"{loc} is the capital of {cou}");
+                    var fl = CData.GetFlag(cou);
+                    if (fl != null)
+                    {
+                        // Use one of the following two options:
+                        await turnContext.SendActivityAsync($"{loc} is the capital of {cou}\n![]({fl})");
+                        /* await turnContext.SendActivityAsync(
+                            MessageFactory.ContentUrl(fl, "image/png", 
+                            text: $"{loc} is the capital of {cou}"));
+                        */
+                    }
+                    else
+                    {
+                        await turnContext.SendActivityAsync(cou == null
+                                ? $"I do not know the city named {loc}"
+                                : $"{loc} is the capital of {cou}");
+                    }
                     break;
                 case "get_population":
                     var pop = CData.GetPopulation(loc);
@@ -89,19 +110,18 @@ namespace Microsoft.BotBuilderSamples.Bots
                             : $"The population of {loc} is {pop}");
                     break;
                 default:
-                    await turnContext.SendActivityAsync("I do not know that one");
+                    await turnContext.SendActivityAsync(unknownText);
                     break;
             }
         }
 
         protected override async Task OnMembersAddedAsync(IList<ChannelAccount> membersAdded, ITurnContext<IConversationUpdateActivity> turnContext, CancellationToken cancellationToken)
         {
-            var welcomeText = "Hello and welcome!";
             foreach (var member in membersAdded)
             {
                 if (member.Id != turnContext.Activity.Recipient.Id)
                 {
-                    await turnContext.SendActivityAsync(MessageFactory.Text(welcomeText, welcomeText), cancellationToken);
+                    await turnContext.SendActivityAsync(welcomeText);
                 }
             }
         }

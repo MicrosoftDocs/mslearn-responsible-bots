@@ -27,7 +27,7 @@ commit history. Here is a short guideline:
 
  * [Country Capital Dictionary](../../tree/t1-capdict)
  * [LUIS Bot to answer capital questions](../../tree/t2-luisrec)
- * [Integration of Q&A Maker](../../tree/t3-qamaker)
+ * [Integration of Q&A Maker](../../tree/t3-qnamaker)
  * [Final Version](../../tree/master)
 
 ## Contents
